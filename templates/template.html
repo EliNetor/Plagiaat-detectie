@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Auteur</th>
+                {% for other_auteur in auteurs %}
+                    <th>{{ other_auteur }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for auteur in auteurs %}
+                <tr>
+                    <td>{{ auteur }}</td>
+                    {% for other_auteur in auteurs %}
+                        <td>                          
+                            {% set opmerkingen_list = opmerkingen_matrix[auteur][other_auteur] %}
+                            {% if opmerkingen_list %}
+                                {{ opmerkingen_list}}
+                            {% else %}
+                                /
+                            {% endif %}    
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
