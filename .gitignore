@@ -1,3 +1,4 @@
 .venv
 autors
 out.html
+__pycache__
