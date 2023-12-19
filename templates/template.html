@@ -23,7 +23,11 @@
                         <td>                          
                             {% set opmerkingen_list = opmerkingen_matrix[auteur][other_auteur] %}
                             {% if opmerkingen_list %}
-                                {{ opmerkingen_list}}
+                            <ul>
+                                {% for item in opmerkingen_list %}
+                                    <li>{{ item }}</li>
+                                {% endfor %}
+                            </ul>
                             {% else %}
                                 /
                             {% endif %}    

@@ -45,6 +45,7 @@ for file_path in filepath:
                         opmerkingen_matrix['Auteur' + str(counter)][alias_mapping[aut]] = [f'identieke file {file_name}']
 
 
+#checks for comment lines
 comment_lines = functions.GetComments(filepath)
 counter = 0
 for i, lines1 in enumerate(comment_lines):
@@ -57,6 +58,12 @@ for i, lines1 in enumerate(comment_lines):
                     opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)] = [f"Common lines: {common_lines}"]
                     opmerkingen_matrix['Auteur' + str(j+1)]['Auteur' + str(i+1)] = [f"Common lines: {common_lines}"]
                 break
+
+#check for commons spelling mistakes
+d_mistakes = functions.CheckErrors(filepath)
+print(d_mistakes)
+for entry in d_mistakes:
+    opmerkingen_matrix["Auteur" + str(entry['key'] + 1)]["Auteur" + str(entry['value'][0] + 1)] += [f"The similar mistakes are: {entry['value'][1]}"]
 
 print(opmerkingen_matrix)
 
