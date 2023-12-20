@@ -45,26 +45,11 @@ for file_path in filepath:
                         file_name = os.path.basename(file_path)
                         opmerkingen_matrix['Auteur' + str(counter)][alias_mapping[aut]] = [f'identieke file {file_name}']
 
-
-#checks for comment lines
-# comment_lines = functions.GetComments(filepath)
-# counter = 0
-# for i, lines1 in enumerate(comment_lines):
-#     for j, lines2 in enumerate(comment_lines):
-#         if i != j: 
-#             common_lines = set(lines1) & set(lines2)
-#             if common_lines:
-#                 counter += 1
-#                 if not opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)]:
-#                     opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)] += [f"Common lines: {common_lines}"]
-#                     opmerkingen_matrix['Auteur' + str(j+1)]['Auteur' + str(i+1)] += [f"Common lines: {common_lines}"]
-#                 break
-
 #check for commons spelling mistakes
-d_mistakes = functions.CheckErrors(filepath)
-print(d_mistakes)
-for entry in d_mistakes:
-    opmerkingen_matrix["Auteur" + str(entry['key'] + 1)]["Auteur" + str(entry['value'][0] + 1)] += [f"The similar mistakes are: {entry['value'][1]}"]
+# d_mistakes = functions.CheckErrors(filepath)
+# print(d_mistakes)
+# for entry in d_mistakes:
+#     opmerkingen_matrix["Auteur" + str(entry['key'] + 1)]["Auteur" + str(entry['value'][0] + 1)] += [f"The similar mistakes are: {entry['value'][1]}"]
 
 
 #only here will multyple files be used, in the lines above only the first file is used
@@ -100,6 +85,14 @@ for aut in auteurs:
                             opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]] += [f"Common lines: {common_lines}"]
                             opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]] += [f"Common lines: {common_lines}"]
                         break
+            
+            #check for commons spelling mistakes
+            d_mistakes = functions.CheckErrors(filepath_aut + filepath_aut2)
+            print(d_mistakes)
+            for entry in d_mistakes:
+                new_entry = f"The similar mistakes are: {entry['value'][1]}"
+                if new_entry not in opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]]:
+                    opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]].append(new_entry)
 
             #check if file is the same without comment lines
             if len(filepath_aut) == len(filepath_aut2):
