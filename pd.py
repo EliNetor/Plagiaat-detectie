@@ -80,7 +80,15 @@ for aut in auteurs:
                             if new_entry not in opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]]:
                                 opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]].append(new_entry)
                             if new_entry not in opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]]:
-                                opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]].append(new_entry)       
+                                opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]].append(new_entry) 
+
+            #check if file is the same with ast
+            for f1 in filepath_aut:
+                for f2 in filepath_aut2:
+                    if functions.CompareAst(f1,f2):
+                        new_entry = f"{f1.name} and {f2.name} are identical acording to AST"
+                        if new_entry not in opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]]:
+                            opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]].append(new_entry)
 
 env = Environment(
     loader=FileSystemLoader("."),

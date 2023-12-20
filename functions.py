@@ -1,6 +1,7 @@
 from pathlib import Path
 from spellchecker import SpellChecker
 import libcst as cst
+import ast
 
 class LexiconCollector(cst.CSTTransformer):
     def __init__(self):
@@ -65,3 +66,14 @@ def CheckWithoutComments(file_path1, file_path2): #methode houd geen rekening me
             trees.append(parsed_module)
     
     return trees[0].deep_equals(trees[1])
+
+def CompareAst(file_path1, file_path2):
+    with open(file_path1, 'r') as f1, open(file_path2, 'r') as f2:
+        lines1 = f1.readlines()
+        lines2 = f2.readlines()
+        sc1 = ''.join(lines1)
+        sc2 = ''.join(lines2)
+        tree1 = ast.parse(sc1)
+        tree2 = ast.parse(sc2)
+        
+        return ast.dump(tree1) == ast.dump(tree2)
