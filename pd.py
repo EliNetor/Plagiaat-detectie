@@ -72,14 +72,16 @@ for aut in auteurs:
                     opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]].append(new_entry)
 
             #check if file is the same without comment lines
+            #the check will only be preformed is the 2 autors have the same amount (zoals in de opdracht vermeld staat)
             if len(filepath_aut) == len(filepath_aut2):
                 for f1 in filepath_aut:
                     for f2 in filepath_aut2:
                         if functions.CheckWithoutComments(f1, f2):
-                            new_entry = f"2 or more files are identical without comments"
-                            if new_entry not in opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]]:
+                            new_entry = f"{f1.name} and {f2.name} are identical without comments"
+                            check_entry = f"{f2.name} and {f1.name} are identical without comments"
+                            if new_entry and check_entry not in opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]]:
                                 opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]].append(new_entry)
-                            if new_entry not in opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]]:
+                            if new_entry and check_entry not in opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]]:
                                 opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]].append(new_entry) 
 
             #check if file is the same with ast
