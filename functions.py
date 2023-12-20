@@ -10,6 +10,10 @@ class LexiconCollector(cst.CSTTransformer):
     def visit_Name(self,node):
         self.all_words.append(node.value)
 
+class CSTTrans(cst.CSTTransformer):
+    def leave_Comment(self, original_node, updated_node):
+        return cst.RemoveFromParent()
+
 def GetComments(file_paths):
     contents = []
     for path in file_paths:
@@ -44,3 +48,21 @@ def CheckErrors(file_paths):
                     d_common_errors.append(dict(key= index, value=[j, common_errors]))
     print(d_common_errors)
     return d_common_errors    
+
+def CheckWithoutComments(file_path1, file_path2): #methode houd geen rekening met empylines!!!!
+    trees = []
+    with open(file_path1, 'r') as f:
+            lines = f.readlines()
+            source_code = ''.join(lines)
+            parsed_module = cst.parse_module(source_code)
+            parsed_module = parsed_module.visit(CSTTrans())
+            trees.append(parsed_module)
+
+    with open(file_path2, 'r') as f:
+            lines = f.readlines()
+            source_code = ''.join(lines)
+            parsed_module = cst.parse_module(source_code)
+            parsed_module = parsed_module.visit(CSTTrans())
+            trees.append(parsed_module)
+    
+    return trees[0].deep_equals(trees[1])

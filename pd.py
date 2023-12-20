@@ -65,6 +65,13 @@ print(d_mistakes)
 for entry in d_mistakes:
     opmerkingen_matrix["Auteur" + str(entry['key'] + 1)]["Auteur" + str(entry['value'][0] + 1)] += [f"The similar mistakes are: {entry['value'][1]}"]
 
+#check if file is the same without comment lines
+for i, p in enumerate(filepath):
+    for j, p2 in enumerate(filepath):
+        if i != j:
+            if functions.CheckWithoutComments(filepath[i], filepath[j]):
+                 opmerkingen_matrix["Auteur" + str(i + 1)]["Auteur" + str(j + 1)] += [f"Files are identical without comments"]
+
 print(opmerkingen_matrix)
 
 env = Environment(
