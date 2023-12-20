@@ -20,6 +20,7 @@ for auteur in auteurs:
     file_paths = directory_path.glob("*.py")
     for file_path in file_paths:
         filepath.append(file_path)
+        break
 
 counter = 0
 
@@ -55,8 +56,8 @@ for i, lines1 in enumerate(comment_lines):
             if common_lines:
                 counter += 1
                 if not opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)]:
-                    opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)] = [f"Common lines: {common_lines}"]
-                    opmerkingen_matrix['Auteur' + str(j+1)]['Auteur' + str(i+1)] = [f"Common lines: {common_lines}"]
+                    opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)] += [f"Common lines: {common_lines}"]
+                    opmerkingen_matrix['Auteur' + str(j+1)]['Auteur' + str(i+1)] += [f"Common lines: {common_lines}"]
                 break
 
 #check for commons spelling mistakes
@@ -65,12 +66,31 @@ print(d_mistakes)
 for entry in d_mistakes:
     opmerkingen_matrix["Auteur" + str(entry['key'] + 1)]["Auteur" + str(entry['value'][0] + 1)] += [f"The similar mistakes are: {entry['value'][1]}"]
 
-#check if file is the same without comment lines
-for i, p in enumerate(filepath):
-    for j, p2 in enumerate(filepath):
-        if i != j:
-            if functions.CheckWithoutComments(filepath[i], filepath[j]):
-                 opmerkingen_matrix["Auteur" + str(i + 1)]["Auteur" + str(j + 1)] += [f"Files are identical without comments"]
+
+#only here will multyple files be used, in the lines above only the first file is used
+for aut in auteurs:
+    filepath_aut = []
+    filepath_aut2 = []
+
+    directory_path = p / aut
+    file_paths2 = directory_path.glob("*.py")
+    for file_path in file_paths2:
+        filepath_aut.append(file_path)
+
+    for aut2 in auteurs:
+        if aut != aut2:
+            directory_path = p / aut2
+            file_paths2 = directory_path.glob("*.py")
+            for file_path in file_paths2:
+                 filepath_aut2.append(file_path)
+            
+            #check if file is the same without comment lines
+            if len(filepath_aut) == len(filepath_aut2):
+                for f1 in filepath_aut:
+                    for f2 in filepath_aut2:
+                        if functions.CheckWithoutComments(f1, f2):
+                            opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]] += [f"Files are identical without comments (file1: {f1} and file2: {f2})"]
+                            opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]] += [f"Files are identical without comments (file1: {f1} and file2: {f2})"]
 
 print(opmerkingen_matrix)
 
