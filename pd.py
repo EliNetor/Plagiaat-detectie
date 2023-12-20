@@ -47,18 +47,18 @@ for file_path in filepath:
 
 
 #checks for comment lines
-comment_lines = functions.GetComments(filepath)
-counter = 0
-for i, lines1 in enumerate(comment_lines):
-    for j, lines2 in enumerate(comment_lines):
-        if i != j: 
-            common_lines = set(lines1) & set(lines2)
-            if common_lines:
-                counter += 1
-                if not opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)]:
-                    opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)] += [f"Common lines: {common_lines}"]
-                    opmerkingen_matrix['Auteur' + str(j+1)]['Auteur' + str(i+1)] += [f"Common lines: {common_lines}"]
-                break
+# comment_lines = functions.GetComments(filepath)
+# counter = 0
+# for i, lines1 in enumerate(comment_lines):
+#     for j, lines2 in enumerate(comment_lines):
+#         if i != j: 
+#             common_lines = set(lines1) & set(lines2)
+#             if common_lines:
+#                 counter += 1
+#                 if not opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)]:
+#                     opmerkingen_matrix['Auteur' + str(i+1)]['Auteur' + str(j+1)] += [f"Common lines: {common_lines}"]
+#                     opmerkingen_matrix['Auteur' + str(j+1)]['Auteur' + str(i+1)] += [f"Common lines: {common_lines}"]
+#                 break
 
 #check for commons spelling mistakes
 d_mistakes = functions.CheckErrors(filepath)
@@ -79,18 +79,35 @@ for aut in auteurs:
 
     for aut2 in auteurs:
         if aut != aut2:
+            filepath_aut2 = []
             directory_path = p / aut2
             file_paths2 = directory_path.glob("*.py")
             for file_path in file_paths2:
                  filepath_aut2.append(file_path)
             
+            #checks for comment lines
+            comment_lines1 = functions.GetComments(filepath_aut)
+            comment_lines2 = functions.GetComments(filepath_aut2)
+            counter = 0
+            for lines1 in comment_lines1:
+                for lines2 in comment_lines2:
+        
+                    common_lines = set(lines1) & set(lines2)
+
+                    if common_lines:
+                        counter += 1
+                        if not opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]]:
+                            opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]] += [f"Common lines: {common_lines}"]
+                            opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]] += [f"Common lines: {common_lines}"]
+                        break
+
             #check if file is the same without comment lines
             if len(filepath_aut) == len(filepath_aut2):
                 for f1 in filepath_aut:
                     for f2 in filepath_aut2:
                         if functions.CheckWithoutComments(f1, f2):
                             opmerkingen_matrix[alias_mapping[aut]][alias_mapping[aut2]] += [f"Files are identical without comments (file1: {f1} and file2: {f2})"]
-                            opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]] += [f"Files are identical without comments (file1: {f1} and file2: {f2})"]
+                            opmerkingen_matrix[alias_mapping[aut2]][alias_mapping[aut]] += [f"Files are identical without comments (file1: {f1} and file2: {f2})"]        
 
 print(opmerkingen_matrix)
 
