@@ -46,7 +46,6 @@ def CheckErrors(file_paths):
                 common_errors = incorrect_set.intersection(other_set)
                 if(common_errors != set()): #stop the addition of set()
                     d_common_errors.append(dict(key= index, value=[j, common_errors]))
-    print(d_common_errors)
     return d_common_errors    
 
 def CheckWithoutComments(file_path1, file_path2): #methode houd geen rekening met empylines!!!!
